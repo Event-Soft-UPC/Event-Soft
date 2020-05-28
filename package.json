@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run lint && npm run build && node lib/index.js"
   },
   "keywords": [
     "API",
@@ -19,10 +19,22 @@
     "typescript": "^3.8.0"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
     "@types/mongoose": "^5.7.21",
+    "@types/uuid": "^8.0.0",
     "@types/validator": "^13.0.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-status-codes": "^1.4.0",
+    "inversify": "^5.0.1",
+    "inversify-inject-decorators": "^3.1.0",
     "mongoose": "^5.9.15",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.1.0",
     "validator": "^13.0.0"
   }
 }

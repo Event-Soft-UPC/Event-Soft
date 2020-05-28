@@ -14,6 +14,9 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+#Rest file
+*.rest
+
 # Runtime data
 pids
 *.pid
@@ -107,5 +110,8 @@ dist/
 # Temporary folders
 tmp/
 temp/
+
+#build
+lib/
 
 # End of https://www.gitignore.io/api/node

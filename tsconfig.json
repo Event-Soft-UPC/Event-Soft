@@ -2,16 +2,21 @@
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitReturns": true,
+    "lib": ["es6"],
     "noUnusedLocals": true,
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
+    "target": "es5",
     "esModuleInterop":true,
+    "moduleResolution": "node",
+    "types": ["reflect-metadata"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
 
   },
   "compileOnSave": true,
   "include": [
-    "src"
+    "src", "ioc"
   ]
 }

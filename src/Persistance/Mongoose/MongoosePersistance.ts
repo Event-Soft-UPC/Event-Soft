@@ -1,5 +1,7 @@
 import PersistanteManager from "../PersistanceManager";
 import {connect} from "mongoose"
+
+
 export default class MongoPersistanceManager implements PersistanteManager{
     async connect(connectionString:string): Promise<void> {
         await connect(connectionString, {
@@ -8,6 +10,5 @@ export default class MongoPersistanceManager implements PersistanteManager{
             useCreateIndex: true,
             useFindAndModify: false,
         })
-    }
-    
+}
 }
