@@ -4,6 +4,7 @@ import {MongoosePublisherRepository} from "../Data/Repository/impl/MongooseRepos
 import PublisherService from "../Application/Services/PublisherService"
 import PublisherServiceImp from "../Application/Services/imp/PublisherServiceImp"
 
+
 export const TYPES = {
     PublisherRepository: Symbol.for("PublisherRepository"),
     PublisherService: Symbol.for("PublisherService"),

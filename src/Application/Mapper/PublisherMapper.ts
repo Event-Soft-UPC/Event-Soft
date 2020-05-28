@@ -1,8 +1,8 @@
-import  CreatePublisherDTO  from "../DTO/CreatePublisherDTO";
+import CreatePublisherDTO from "../DTO/CreatePublisherDTO";
 import Publisher from "../../Data/Entity/Publisher";
-import {v1 as uuid} from "uuid" 
-import  {hash} from "bcryptjs"
+import { v1 as uuid } from "uuid"
+ import { hash } from "bcryptjs" 
 
-export async function mapToPublisherFromCreatePublisherDTO(publisher:CreatePublisherDTO):Promise<Publisher>{
-    return new Publisher(uuid(),publisher.dni,publisher.email,publisher.name, await hash(publisher.password, 8) )
+export async function mapToPublisherFromCreatePublisherDTO(publisher: CreatePublisherDTO): Promise<Publisher> {
+    return new Publisher(uuid(), publisher.dni, publisher.email, publisher.name,  await hash(publisher.password,3) )
 }
