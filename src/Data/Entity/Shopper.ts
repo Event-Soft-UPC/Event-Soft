@@ -1,6 +1,6 @@
-import { PublisherSchema } from "../Schema/PublisherSchema";
+import { ShopperSchema } from "../Schema/ShopperSchema";
 
-export default class Publisher implements PublisherSchema {
+export default class Shopper implements ShopperSchema{
     id: string = "";
     name: string = "";
     lastName: string = "";
@@ -8,4 +8,3 @@ export default class Publisher implements PublisherSchema {
     email: string = "";
     password: string = "";
 }
-
