@@ -1,7 +1,7 @@
 
 import { Model,Document,Schema,model } from "mongoose"
-import PublisherRepository from "../PublisherRepository";
-import Publisher from "../../Entity/Publisher";
+import PublisherRepository from "../../../Domain/Publisher/PublisherRepository";
+import Publisher from "../../../Domain/Publisher/Publisher";
 import {injectable} from "inversify";
 
 @injectable()

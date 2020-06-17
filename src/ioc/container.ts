@@ -1,8 +1,8 @@
 import { Container } from "inversify"
-import PublisherRepository from "../Data/Repository/PublisherRepository"
-import {MongoosePublisherRepository} from "../Data/Repository/impl/MongooseRepository"
-import PublisherService from "../Application/Services/PublisherService"
-import PublisherServiceImp from "../Application/Services/imp/PublisherServiceImp"
+import PublisherRepository from "../Domain/Publisher/PublisherRepository"
+import {MongoosePublisherRepository} from "../Infrastructure/Mongo/impl/MongooseRepository"
+import PublisherService from "../Domain/Services/PublisherService"
+import PublisherServiceImp from "../Domain/Services/imp/PublisherServiceImp"
 
 export const TYPES = {
     PublisherRepository: Symbol.for("PublisherRepository"),

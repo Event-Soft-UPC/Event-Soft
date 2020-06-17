@@ -1,10 +1,10 @@
-import PublisherService from "../../Application/Services/PublisherService";
+import PublisherService from "../../Domain/Services/PublisherService";
 import { HttpRequest, HttpResponse } from "../utils";
 import CreatePublisherDTO from "../../Application/DTO/CreatePublisherDTO";
 import { CreatePublisherValidator } from "../Validators/PublisherValidator";
 import {Router,Request,Response} from "express";
 import { OK,CREATED, BAD_REQUEST, INTERNAL_SERVER_ERROR, getStatusText } from 'http-status-codes'
-import DuplicatePropertyException from "../../Application/Services/Exception/DuplicatePropertyException";
+import DuplicatePropertyException from "../../Domain/Services/Exception/DuplicatePropertyException";
 
 
 export  function publisherRouter (publisherController:PublisherController){

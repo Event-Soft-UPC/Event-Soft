@@ -1,5 +1,5 @@
 import  CreatePublisherDTO  from "../DTO/CreatePublisherDTO";
-import Publisher from "../../Data/Entity/Publisher";
+import Publisher from "../../Domain/Publisher/Publisher";
 import {v1 as uuid} from "uuid" 
 import  {hash} from "bcryptjs"
 

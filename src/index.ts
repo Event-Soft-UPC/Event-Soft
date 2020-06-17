@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 import { publisherRouter, PublisherController } from "./Presentation/Controller/PublisherController";
 import "reflect-metadata";
 import container, { TYPES } from "./ioc/container"
-import PublisherService from "./Application/Services/imp/PublisherServiceImp";
+import PublisherService from "./Domain/Services/imp/PublisherServiceImp";
 
 dotenv.config()
 
