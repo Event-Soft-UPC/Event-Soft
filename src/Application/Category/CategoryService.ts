@@ -1,4 +1,4 @@
-import { CategoryRepository } from "./CategoryRepository";
+import { CategoryRepository } from "../../Domain/Category/CategoryRepository";
 
 export class CategoryService {
     private readonly categoryRepository:CategoryRepository

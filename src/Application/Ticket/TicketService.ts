@@ -1,20 +1,17 @@
 import { TicketRepository } from "../../Domain/Ticket/TicketRepository";
-import { Identifier } from "../../Domain/Shared/Identifier";
-import { ShopperRepository } from "../../Domain/Shopper/ShopperRepository";
 
 export class TicketService {
     private readonly ticketRepository:TicketRepository
-    private readonly shopperRepository:ShopperRepository
 
-    constructor(ticketRepository:TicketRepository,shopperRepository:ShopperRepository){
-        this.shopperRepository = shopperRepository
+    constructor(ticketRepository:TicketRepository){
         this.ticketRepository = ticketRepository
     }
 
-    async sell(shopperId:Identifier, ticketId:Identifier){
-        const shopper = await  this.shopperRepository.findById(shopperId)
-        const ticket = await  this.ticketRepository.findById(ticketId)
-        ticket.sell(shopper)
+    async sell(shopperId:string, seat:string){
+        const ticket = await  this.ticketRepository.findByIdOrNull(seat)
+        if (ticket === null)
+            throw new Error("This ticket doesnt exists")
+        ticket.sell(shopperId)
         return ticket
     }
 

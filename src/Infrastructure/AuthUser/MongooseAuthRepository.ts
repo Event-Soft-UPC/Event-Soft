@@ -2,40 +2,53 @@ import { Schema, Document, model } from "mongoose"
 import { AuthUserSchema } from "./Schema"
 import { AuthUserRepository } from "../../Domain/AuthUser/AuthUserRepository"
 import { AuthUser } from "../../Domain/AuthUser/AuthUser"
-import { Identifier } from "../../Domain/Shared/Identifier"
+import { Query } from "../../Shared/QueryBuilder"
+import { domainToSchema, schemaToDomain } from "../../Shared/Mapper/AuthUserMapper"
+import { injectable } from "inversify"
 
-export class MongooseAuthRepository implements AuthUserRepository{
-    async save(entity: AuthUser): Promise<void> {
-        const schema:AuthUserSchema = {
-            email:entity.email,
-            firstName:entity.name.firstName,
-            lastName:entity.name.lastName,
-            password:entity.password,
-            refreshToken:entity.refreshToken,
-            username:entity.username.id
-        }
-        const userDocument =  new UserModel(schema)
-        await userDocument.save()        
+
+@injectable()
+export class MongooseAuthRepository implements AuthUserRepository {
+    async update(entity: AuthUser): Promise<void> {
+        await UserModel.findOneAndUpdate({username:entity.username},domainToSchema(entity)).exec()
     }
-    update(entity: AuthUser): Promise<void> {
-        throw new Error("Method not implemented.")
+    async findByIdOrNull(id: string): Promise<AuthUser | null> {
+        const schema = await UserModel.findOne({ username: id }).exec()
+        return (schema === null) ? null : schemaToDomain(schema)
     }
-    findById(id: Identifier): Promise<import("../../Domain/AuthUser/AuthUser").AuthUser> {
-        throw new Error("Method not implemented.")
+    async findAll(query?: Query<AuthUser> | undefined): Promise<AuthUser[]> {
+        const _query = UserModel.find()
+        query?.where.forEach((v) => {
+            if (!!v.eq)
+                _query.where(v.property).equals(v.eq)
+            if (!!v.range)
+                _query.where(v.property).gt(v.range.lower).lt(v.range.upper)
+        })
+        const schemas = await _query.exec()
+        return schemas.map(v => schemaToDomain(v))
     }
-    findAll(query?: any): Promise<import("../../Domain/AuthUser/AuthUser").AuthUser[]> {
-        throw new Error("Method not implemented.")
-    }
-    findOne(query: any): Promise<import("../../Domain/AuthUser/AuthUser").AuthUser> {
-        throw new Error("Method not implemented.")
-    }
-    findOneOrNull(query: any): Promise<import("../../Domain/AuthUser/AuthUser").AuthUser | null> {
-        throw new Error("Method not implemented.")
+    async findOneOrNull(query: Query<AuthUser>): Promise<AuthUser | null> {
+        const _query = UserModel.findOne()
+        query?.where.forEach((v) => {
+            if (!!v.eq)
+                _query.where(v.property).equals(v.eq)
+            if (!!v.range)
+                _query.where(v.property).gt(v.range.lower).lt(v.range.upper)
+        })
+        const schema = await _query.exec()
+        return (schema === null) ? null : schemaToDomain(schema)
     }
     async delete(entity: AuthUser): Promise<void> {
-        await UserModel.remove({username:entity.username.id}).exec()
+        await UserModel.deleteOne({username:entity.username}).exec()
     }
-    
+
+    async save(entity: AuthUser): Promise<void> {
+        const schema = domainToSchema(entity)
+        const userDocument = new UserModel(schema)
+        await userDocument.save()
+    }
+
+
 }
 
 const authUserSchema = new Schema({
@@ -52,11 +65,14 @@ const authUserSchema = new Schema({
     },
     password: {
         type: String,
-        required:true
+        required: true
     },
-    refreshToken:{
-        type:String,
-        required:true
+    refreshToken: {
+        type: String,
+        required: true
+    },
+    roles: {
+        type: [String]
     }
 })
 

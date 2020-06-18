@@ -9,10 +9,11 @@ export class EventService {
     }
 
     async getEventById(id:Identifier){
-        return await this.eventRepository.findById(id)
+        return await this.eventRepository.findByIdOrNull(id)
     }
 
     async getAllEvents(){
         return await this.eventRepository.findAll()
     }
+
 }
