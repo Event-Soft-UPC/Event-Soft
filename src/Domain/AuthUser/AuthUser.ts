@@ -67,7 +67,8 @@ export class AuthUser {
     }
 
     addSubscription(category:string){
-        this._subscriptions.push(category)
+        if (!this._subscriptions.includes(category))
+            this._subscriptions.push(category)
     }
 
 }
