@@ -1,6 +1,6 @@
 import validator from "validator"
 import { LoginRequest, RegisterRequest, UpgradeProfileRequest, UpdateTokenRequest } from "./HttpRequest"
-import { ApiException} from "../../Exception/InputException"
+import { InputException} from "../../Exception/InputException"
 
 export const MAX_USER_LENGTH = 10
 export const MIN_PASSWORD_LENGTH = 6
@@ -22,7 +22,7 @@ export class LoginValidator {
         validateUsername(this.errors,this.user.username)
         validatePassword(this.errors,this.user.password)
         if (this.errors.length > 0)
-            throw new ApiException(this.errors)
+            throw new InputException(this.errors)
     }
 
 
@@ -43,7 +43,7 @@ export class RegisterValidator {
         validateLastName(this.errors,this.user.lastname)
         validateEmail(this.errors,this.user.email)
         if (this.errors.length > 0)
-            throw new ApiException(this.errors)
+            throw new InputException(this.errors)
     }
 
 
@@ -60,7 +60,7 @@ export class UpgradeProfileValidator {
     validate(){
         validateUsername(this.errors,this.user.username)
         if (this.errors.length > 0)
-            throw new ApiException(this.errors)
+            throw new InputException(this.errors)
     }
 
 
@@ -77,7 +77,7 @@ export class UpdateTokenValidator {
     validate(){
         validateRefreshToken(this.errors,this.token.refreshToken)
         if (this.errors.length > 0)
-            throw new ApiException(this.errors)
+            throw new InputException(this.errors)
     }
 
 

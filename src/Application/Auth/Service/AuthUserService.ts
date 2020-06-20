@@ -1,10 +1,11 @@
 import { AuthUserRepository } from "../../../Domain/AuthUser/AuthUserRepository";
 import { AuthUser } from "../../../Domain/AuthUser/AuthUser";
 import { Query } from "../../../Shared/QueryBuilder";
-import {  generateRefreshToken,  generateStandarToken, verifyRefreshToken, getClaimsFromToken, InvalidTokenException} from "../../../Domain/Shared/TokenManager";
+import {  generateRefreshToken,  generateStandarToken, verifyRefreshToken, getClaimsFromToken} from "../../../Domain/Shared/TokenManager";
 import {PasswordException, DuplicateUserException, UserNotFoundException } from "../../../Domain/Shared/DomainError";
 import bcrypt from "bcryptjs"
-import { FullName } from "../../../Domain/AuthUser/FullName";
+import { FullName } from "../../../Domain/AuthUser/ValueObject/FullName";
+import { userToDTO } from "../Api/HttpResponse";
 
 export class AuthUserService {
     private readonly authRepository:AuthUserRepository
@@ -16,24 +17,21 @@ export class AuthUserService {
     }
 
     async addPublisherProfile(username:string){
-        const user = await this.authRepository.findByIdOrNull(username)
-        if (user === null)
-            throw new UserNotFoundException()
+        const user = await this.authRepository.findById(username)
         user.addPublisherProfile()
         await this.authRepository.save(user)
     }
 
     async registerAsPublisher(email:string,password:string,username:string,name:string,lastname:string){
         await this.validator.checkUniqueUser(username)
-        const user = new AuthUser(username,new FullName(name,lastname),email,await bcrypt.hash(password, 8),generateRefreshToken(username))
-        user.addPublisherProfile()
+        const user = AuthUser.createAuthUser(username,new FullName(name,lastname),["Publisher","Shopper"],email,await bcrypt.hash(password, 8),generateRefreshToken(username))
         await this.authRepository.save(user)
         return {token:generateStandarToken(user),refreshToken:user.refreshToken}
     }
 
     async register(email:string,password:string,username:string,firstName:string,lastname:string){
         await this.validator.checkUniqueUser(username)
-        const user = new AuthUser(username,new FullName(firstName,lastname),email,await bcrypt.hash(password, 8),generateRefreshToken(username))
+        const user = AuthUser.createAuthUser(username,new FullName(firstName,lastname),["Shopper"],email,await bcrypt.hash(password, 8),generateRefreshToken(username))
         await this.authRepository.save(user)
         return {token:generateStandarToken(user),refreshToken:user.refreshToken}
     }
@@ -62,12 +60,19 @@ export class AuthUserService {
         const user =  await this.authRepository.findOneOrNull(query)
         if (user === null)
             throw new UserNotFoundException()
-        if (user.refreshToken !== refreshToken )
-            throw new InvalidTokenException("Refresh Token")
 
         return {token:generateStandarToken(user),refreshToken:refreshToken}    
     }
 
+    async getUserById(username:string){
+       const user =  await this.authRepository.findById(username)
+       return userToDTO(user)
+    }
+
+    async getPublisherWithEvents(username:string){
+        const user =  await this.authRepository.populatePublisher(username)
+        return userToDTO(user)
+     }
 }
 
 export class AuthServiceValidator {

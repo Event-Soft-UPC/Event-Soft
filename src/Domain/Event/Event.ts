@@ -1,11 +1,10 @@
-import { Ticket } from "../Ticket/Ticket"
 import { DateRange } from "../Shared/DateRange"
-import { Identifier } from "../Shared/Identifier"
-import { AuthUser } from "../AuthUser/AuthUser"
-import { OnlyPublishersException } from "../Shared/DomainError"
+import { Zone } from "./Zone"
+
+export type EventStatus = "Available" | "SoldOut"
 
 export class Event {
-    readonly id:Identifier
+    readonly id:string
     readonly ownerId:string
     readonly name:string
     readonly image:string
@@ -13,37 +12,40 @@ export class Event {
     readonly duration:DateRange
     readonly address:string
     readonly referenceLocation:string
-    private _tickets:Array<Ticket> = []
+    private readonly zones:Zone[]
 
-    constructor(id:Identifier,owner:string,name:string,image:string,category:string,duration:DateRange,address:string,referenceLocation:string){
+    constructor(id:string,owner:string,name:string,image:string,categories:string[],duration:DateRange,address:string,referenceLocation:string, zones:Zone[]){
         this.id = id
         this.name = name
         this.image = image
-        this.categories.push(category)
+        this.categories = categories
         this.duration = duration
         this.address = address
         this.referenceLocation = referenceLocation 
         this.ownerId = owner
+        this.zones = zones
     }
-
-    setTickets(tickets:Ticket[]){
-        this._tickets = tickets
-        return this
-    }
-
-    get tickets(){return this._tickets}
 
     isEquals(event:Event){
-        return event.id.isEquals(this.id)
+        return event.id === this.id
     }
 
     addCategory(categoryName:string){
         this.categories.push(categoryName)
         return this
-    }      
-    public static createEvent(id:Identifier,user:AuthUser,owner:AuthUser,name:string,image:string,category:string,duration:DateRange,address:string,referenceLocation:string){
-        if (!user.roles.includes("Publisher"))
-            throw new OnlyPublishersException();
-        return new Event(id,owner.username,name,image,category,duration,address,referenceLocation);
     }
+
+    getZones(){
+        return this.zones
+    }
+
+    sellTicketsByZone(zoneName:string,quantity:number){
+       const zone = this.zones.find((v)=>v.name === zoneName)
+       zone?.sellTickets(quantity)
+    }
+
+    getStatus():EventStatus{
+       return (this.zones.some(v => v.isAvailable)) ?  "Available"  : "SoldOut" 
+    }
+    
 }

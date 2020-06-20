@@ -36,24 +36,46 @@ export const verifyRefreshToken = function(refreshToken:string){
     try{
         verify(refreshToken,process.env.R_JWT_KEY!)
     } catch(err){
-        throw new InvalidTokenException("Refresh Token")
+        throw new InvalidRefreshTokenException()
     }
     
 }
 
-export const verifyStandarToken = function(refreshToken:string){
+export const verifyStandarToken = function(refreshToken?:string){
+    if (refreshToken === undefined) throw new InvalidTokenException()
     try{
         verify(refreshToken,process.env.JWT_KEY!)
     } catch(err){
-        throw new InvalidTokenException("Token")
+        throw new InvalidTokenException()
     }
     
 }
 
-
-export class InvalidTokenException extends Error {
-    constructor(type:string) {
-        super(`${type} is invalid`)
+export class SecurityException extends Error {
+    constructor(message:string) {
+        super(message)
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }
+
+export class InvalidTokenException extends SecurityException {
+    constructor() {
+        super("Invalid Token")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
+export class InvalidRefreshTokenException extends SecurityException {
+    constructor() {
+        super("Invalid Refresh Token")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
+export class UnAuthorizedTokenException extends SecurityException {
+    constructor() {
+        super("Unauthorized user for this action")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+

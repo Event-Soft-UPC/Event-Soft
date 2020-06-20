@@ -1,6 +1,4 @@
-import { TicketSchema } from "../Ticket/Schema";
-import { AuthUserSchema } from "../AuthUser/Schema";
-import { CategorySchema } from "../Category/Schema";
+import { Zone } from "../../Domain/Event/Zone";
 
 export interface EventSchema {
     eventId:string,
@@ -11,7 +9,6 @@ export interface EventSchema {
     end:Date,
     address:string,
     referenceLocation:string
-    user:AuthUserSchema
-    categories:CategorySchema
-    tickets:TicketSchema[]
+    categoriesId:string[]
+    zones:Zone[]
 }

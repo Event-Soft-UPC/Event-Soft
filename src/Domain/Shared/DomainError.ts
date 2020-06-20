@@ -19,9 +19,32 @@ export class DuplicateUserException extends DomainException {
     }
 }
 
+export class DuplicateCategoryException extends DomainException {
+    constructor() {
+        super("This username already exists")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
 export class UserNotFoundException extends DomainException {
     constructor() {
         super("There is no user registered with that username")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
+
+export class EventNotFoundException extends DomainException {
+    constructor() {
+        super("There is no event with that credentials")
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+}
+
+
+export class CategoryNotFoundException extends DomainException {
+    constructor() {
+        super("There is no category with that name")
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }
@@ -47,12 +70,20 @@ export class BuyTicketException extends DomainException {
     }
 }
 
-export class OnlyPublishersException extends DomainException {
+export class ZoneSoldOut extends DomainException {
     constructor() {
-        super("Only publishers can create an event")
+        super("this zone is sold out")
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }
+
+export class MoneyException extends DomainException{
+    constructor(message:string) {
+        super(message)
+        Object.setPrototypeOf(this, new.target.prototype)
+    }
+} 
+
 
 
 
