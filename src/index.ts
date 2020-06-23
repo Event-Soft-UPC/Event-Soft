@@ -11,7 +11,6 @@ import subscriptionRouter from "./Application/Subscription/Api/SubscriptionContr
 
 dotenv.config()
 
-
 const persistanceManager = getPersistanceManager("mongo");
 persistanceManager.connect(process.env.CONNECTION_STRING!).then(() => {
     console.log("DB Connect")
