@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Event Soft API CD",
+        "title": "Event Soft API",
         "description": "This is the api documentation for Event Soft Project",
         "license": {
             "name": "MIT",
@@ -446,9 +446,6 @@
         },
         "/categories/{name}":{
             "get":{
-                "security": [
-                    {"BearerAuth":[]}
-                ],
                 "tags": [
                     "Category"
                 ],
@@ -483,9 +480,6 @@
         },
         "/categories/{name}/events":{
             "get":{
-                "security": [
-                    {"BearerAuth":[]}
-                ],
                 "tags": [
                     "Category"
                 ],
