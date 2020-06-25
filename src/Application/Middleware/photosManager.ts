@@ -1,4 +1,5 @@
 import multer from "multer"
+import { MIN_MAIN_IMAGES, MIN_REFERENCES_IMAGES } from "../Shared/BaseValidator"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -26,6 +27,23 @@ export const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
 }).fields([
-    { name: "main", maxCount: 1 },
-    { name: "references", maxCount: 4 }
+    { name: "main", maxCount: MIN_MAIN_IMAGES },
+    { name: "references", maxCount: MIN_REFERENCES_IMAGES }
 ])
+export function getMainPaths(files?:{ [fieldname: string]: Express.Multer.File[] }):string[]{
+    return getPaths("main",files)
+}
+
+export function getReferencesPath(files?:{ [fieldname: string]: Express.Multer.File[] }):string[]{
+    return getPaths("references",files)
+}
+
+function getPaths(type:string,files?:{ [fieldname: string]: Express.Multer.File[] }){
+    const paths:string[] = []
+    if (files === undefined)
+    return paths
+    if (!!files[type])
+        paths.push(...files[type].map(v => v.filename))
+    return paths
+}
+
