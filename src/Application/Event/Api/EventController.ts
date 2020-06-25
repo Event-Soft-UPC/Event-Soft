@@ -23,6 +23,7 @@ router.post("/",[upload,Auth("Publisher")],async (req: Request, res: Response)=>
         const _event = await eventService.createEvent(event)
         res.status(CREATED).send(_event)
     } catch (error) {
+        console.log(error)
         const {status,body} = handlerExceptions(error)
         res.status(status).send(body)
     }

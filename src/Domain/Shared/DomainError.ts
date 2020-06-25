@@ -21,7 +21,7 @@ export class DuplicateUserException extends DomainException {
 
 export class DuplicateCategoryException extends DomainException {
     constructor() {
-        super("This username already exists")
+        super("This category already exists")
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }
