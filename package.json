@@ -21,7 +21,7 @@
     "lint": "npx tslint --project tsconfig.json",
     "build": "npx tsc",
     "test": "npx jest",
-    "start": "npm run lint && npm run build && node lib/index.js"
+    "start": "npm run lint && npm run build && npx nodemon src/index.ts"
   },
   "keywords": [
     "API",
@@ -56,9 +56,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.15",
     "multer": "^1.4.2",
+    "nodemon": "^2.0.4",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.1.4",
     "ts-jest": "^26.1.0",
+    "ts-node": "^8.10.2",
     "tslint": "^5.12.0",
     "typescript": "^3.8.0",
     "uuid": "^8.1.0",

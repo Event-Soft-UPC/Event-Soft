@@ -113,5 +113,8 @@ temp/
 
 #build
 lib/
+#js
+*.js
+.env
 
 # End of https://www.gitignore.io/api/node

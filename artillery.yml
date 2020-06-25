@@ -1,0 +1,10 @@
+config:
+  target: "https://kinesya.com"
+  phases:
+    - duration: 20
+      arrivalRate: 50
+scenarios:
+  - name: "Get Events"
+    flow:
+      - get:
+          url: "/api/users"
