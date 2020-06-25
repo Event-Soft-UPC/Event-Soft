@@ -34,7 +34,7 @@ app.use(express.json())
 app.use(express.static(process.env.PhotosFolder!))
 app.use(`/api/${process.env.API_VERSION}`,router)
 app.listen(process.env.PORT, () => {
-    console.log("Running on 8080")
+    console.log(`Running on ${process.env.PORT}`)
 })
 
 
