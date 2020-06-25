@@ -12,7 +12,8 @@
     "moduleResolution": "node",
     "types": ["reflect-metadata"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true
 
   },
   "compileOnSave": true,

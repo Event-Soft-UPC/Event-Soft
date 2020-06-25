@@ -1,23 +1,23 @@
 import { Router, Request, Response } from "express";
 import { categoryRepository } from "../../../ioc/container";
 import { CategoryService } from "../Service/CategoryService";
-import { upload } from "../../Middleware/photosManager";
-import { RegisterCategoryRequest } from "./HttpRequest";
-import { ImageException } from "../../Exception/InputException";
+import { upload, getMainPaths } from "../../Middleware/photosManager";
+import { CategoryRegisterDTO } from "./CategoryDTO";
 import { CREATED } from "http-status-codes";
 import { handlerExceptions } from "../../Handler/AuthHandler";
+import { CategoryRegisterValidator } from "./CategoryValidator";
 
 const router = Router()
 const categoryService = new CategoryService(categoryRepository)
 
 router.post("/",upload,async(req: Request, res: Response)=>{
     try {
-        const category = req.body as RegisterCategoryRequest
-        if (req.files === undefined) throw new ImageException()        
-        const photo = req.files as {
+        const category = req.body as CategoryRegisterDTO
+        category.image = getMainPaths(req.files as {
             [fieldname: string]: Express.Multer.File[]
-        }
-        category.image = photo.main[0].filename
+        } )[0]
+        const validator = new CategoryRegisterValidator(category)
+        validator.validate()
         const categoryCreated = await categoryService.create(category.name,category.description,category.image)
         res.status(CREATED).send(categoryCreated)
     } catch (error) {

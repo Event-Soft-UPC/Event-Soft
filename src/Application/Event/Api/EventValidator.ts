@@ -1,68 +1,68 @@
-import { EventDTO, ZoneDTO } from "./HttpRequest"
-import { FieldError } from "../../Auth/Api/AuthValidator"
+import { EventDTO, ZoneDTO } from "./EventDTO"
 import { InputException } from "../../Exception/InputException"
+import { BaseValidator, validateMainImages, validateRequired, validateCategoryName, validateArrayLength, validatePositiveNumber, validateMinLength, MIN_ZONE_LENGTH, validateDate, MIN_EVENT_LENGTH } from "../../Shared/BaseValidator"
+import { validateUsername } from "../../Auth/Api/AuthValidator"
 
-export class EventValidator {
+export class EventValidator extends BaseValidator {
     readonly event: EventDTO
-    private errors: FieldError[] = []
 
     constructor(event: EventDTO) {
+        super()
         this.event = event
     }
 
     validate() {
-        validateOwnerId(this.errors,this.event.username)
-        validateImage(this.errors,this.event.image)
-        validateCategories(this.errors,this.event.categories)
-        validateStart(this.errors,this.event.start)
-        validateEnd(this.errors,this.event.end)
-        validateZones(this.errors,this.event.zones)
-        validateReferenceLocation(this.errors,this.event.referenceLocation)
+        this.errors.push(...validateUsername(this.event.owner))
+        this.errors.push(...validateMinLength("event",this.event.name,MIN_EVENT_LENGTH))
+        this.errors.push(...validateMainImages([this.event.image]))
+        this.errors.push(...validateCategories(this.event.categories))
+        this.errors.push(...validateStart(this.event.start))
+        this.errors.push(...validateEnd(this.event.end))
+        this.errors.push(...validateZones(this.event.zones))
+        this.errors.push(...validateReferenceLocation(this.event.referenceLocation))
         if (this.errors.length > 0)
             throw new InputException(this.errors)
     }
-
-
 }
 
-function validateOwnerId(errors:FieldError[],ownerId?: string) {
-    if (ownerId === undefined)
-        errors.push({ property: "ownerId", error: "ownerId is required" })
-}
-
-function validateImage(errors:FieldError[],image?:string){
-    if(image === undefined)
-        errors.push({property:"image", error:"image is required"})
-}
-
-function validateCategories(errors:FieldError[],categories?:string[]){
-    if (categories === undefined)
-        errors.push({property:"categories",error:"categories is required"})
-    else{
-        if (categories.length <= 0)
-            errors.push({property:"categories",error:"categories must contains at least one"})
+function validateCategories(categories?:string[]){
+    const errors = validateRequired("categories",categories)
+    if (errors.length === 0 || categories!.some(v =>validateCategoryName(v).length > 0))
+    {
+        errors.push({property:"categories",error:"Some category name is invalid"}) 
     }
+    return errors  
 }
 
-function validateStart(errors:FieldError[],start?:string){
-    if (start === undefined)
-        errors.push({property:"start",error:"start is required"})
-    }
-
-function validateEnd(errors:FieldError[],end?:string){
-        if (end === undefined)
-            errors.push({property:"end",error:"end is required"})
-    }
-function validateZones(errors:FieldError[],zones?:ZoneDTO[]){
-    if (zones === undefined)
-            errors.push({property:"zones",error:"zones is required"})
-    else{
-        if (zones.length <= 0)
-            errors.push({property:"zones",error:"zones must contains at least one"})
-    }
+function validateZones(zones?:ZoneDTO[]){
+    const errors = validateRequired("zones",zones)
+    errors.push(...validateArrayLength("zones",1,zones))
+    return errors
 }
 
-function validateReferenceLocation(errors:FieldError[],referenceLocation?:string){
-    if (referenceLocation === undefined)
-            errors.push({property:"referenceLocation",error:"referenceLocation is required"})
+export function validateZone(zone:ZoneDTO){
+    const errors = validatePositiveNumber("quantity",zone.quantity)
+    errors.push(...validatePositiveNumber("price",zone.price))
+    errors.push(...validateRequired("currency",zone.currency))
+    errors.push(...validateMinLength("zone",zone.name,MIN_ZONE_LENGTH))
+    return errors    
+}
+
+function validateStart(start?:string){
+   const errors = validateRequired("start",start)
+   if (errors.length === 0)
+        errors.push(...validateDate("start",start!))
+   return errors
+}
+
+function validateEnd(end?:string){
+    const errors = validateRequired("end",end)
+    if (errors.length === 0)
+         errors.push(...validateDate("end",end!))
+    return errors
+}
+
+
+function validateReferenceLocation(referenceLocation?:string){
+    return validateRequired("reference Location",referenceLocation)
 }

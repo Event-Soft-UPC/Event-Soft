@@ -6,7 +6,8 @@ export interface ZoneDTO{
 }
 
 export interface EventDTO {
-    username:string,
+    id:string,
+    owner:string,
     name:string,
     image:string,
     categories:string[],
@@ -15,4 +16,5 @@ export interface EventDTO {
     address:string,
     zones:ZoneDTO[]
     referenceLocation:string
+    status:string
 }
