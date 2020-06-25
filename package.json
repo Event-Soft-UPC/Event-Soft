@@ -18,9 +18,9 @@
     ]
   },
   "scripts": {
-    "lint": "tslint --project tsconfig.json",
-    "build": "tsc",
-    "test": "jest",
+    "lint": "npx tslint --project tsconfig.json",
+    "build": "npx tsc",
+    "test": "npx jest",
     "start": "npm run lint && npm run build && node lib/index.js"
   },
   "keywords": [
