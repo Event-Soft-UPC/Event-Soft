@@ -25,10 +25,10 @@ jobs:
           JWT_KEY : jwt
           R_JWT_KEY: refresh
       - name: Send Email
-        uses: wadeww/send-email-action@master 
+        uses: dawidd6/action-send-mail@v2
         with:
             server_address: smtp.gmail.com
-            port: 465
+            server_port: 465
             username: ${{secrets.EMAIL}}
             password: ${{secrets.EMAIL_PASSWORD}}
             subject: Github Actions job result
