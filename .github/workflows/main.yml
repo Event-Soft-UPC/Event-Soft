@@ -20,6 +20,9 @@ jobs:
         run: |
           npm install 
           npm test
+        env:
+          JWT_KEY : jwt
+          R_JWT_KEY: refresh
       - name: Send Email
         uses: dawidd6/action-send-mail@v2
         with:
@@ -29,7 +32,5 @@ jobs:
             password: ${{secrets.EMAIL_PASSWORD}}
             subject: Github Actions job result
             body: Build job of ${{github.repository}} completed successfully!
-    env:
-      JWT_KEY : jwt
-      R_JWT_KEY: refresh
+
   
