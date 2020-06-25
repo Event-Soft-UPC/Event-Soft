@@ -5,7 +5,7 @@ import {  generateRefreshToken,  generateStandarToken, verifyRefreshToken, getCl
 import {PasswordException, DuplicateUserException, UserNotFoundException } from "../../../Domain/Shared/DomainError";
 import bcrypt from "bcryptjs"
 import { FullName } from "../../../Domain/AuthUser/ValueObject/FullName";
-import { userToDTO } from "../Api/HttpResponse";
+import { entityToDTO } from "../../../Shared/Mapper/AuthUserMapper";
 
 export class AuthUserService {
     private readonly authRepository:AuthUserRepository
@@ -66,12 +66,12 @@ export class AuthUserService {
 
     async getUserById(username:string){
        const user =  await this.authRepository.findById(username)
-       return userToDTO(user)
+       return entityToDTO(user)
     }
 
     async getPublisherWithEvents(username:string){
         const user =  await this.authRepository.populatePublisher(username)
-        return userToDTO(user)
+        return entityToDTO(user)
      }
 }
 

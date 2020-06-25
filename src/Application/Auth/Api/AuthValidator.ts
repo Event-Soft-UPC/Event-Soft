@@ -1,26 +1,20 @@
 import validator from "validator"
-import { LoginRequest, RegisterRequest, UpgradeProfileRequest, UpdateTokenRequest } from "./HttpRequest"
+import { LoginDTO, RegisterDTO, UpgradeProfileDTO, UpdateTokenDTO } from "./AuthDTO"
 import { InputException} from "../../Exception/InputException"
+import { FieldError, validateRequired, validateMinLength, MIN_USER_LENGTH, validateRangeLength, MAX_USER_LENGTH, MIN_PASSWORD_LENGTH, BaseValidator } from "../../Shared/BaseValidator"
 
-export const MAX_USER_LENGTH = 10
-export const MIN_PASSWORD_LENGTH = 6
 
-export interface FieldError{
-    property:string,
-    error:string
-}
+export class LoginValidator extends BaseValidator {
+    readonly user:LoginDTO
 
-export class LoginValidator {
-    readonly user:LoginRequest
-    private  errors: FieldError[] = [] 
-
-    constructor(user:LoginRequest){
+    constructor(user:LoginDTO){
+        super()
         this.user = user
     }
 
     validate(){
-        validateUsername(this.errors,this.user.username)
-        validatePassword(this.errors,this.user.password)
+        this.errors.push(...validateUsername(this.user.username))
+        this.errors.push(...validatePassword(this.user.password)) 
         if (this.errors.length > 0)
             throw new InputException(this.errors)
     }
@@ -28,20 +22,20 @@ export class LoginValidator {
 
 }
 
-export class RegisterValidator {
-    readonly user:RegisterRequest
-    private  errors: FieldError[] = [] 
+export class RegisterValidator extends BaseValidator {
+    readonly user:RegisterDTO
 
-    constructor(user:RegisterRequest){
+    constructor(user:RegisterDTO){
+        super()
         this.user = user
     }
 
     validate(){
-        validateUsername(this.errors,this.user.username)
-        validatePassword(this.errors,this.user.password)
-        validateFirstName(this.errors,this.user.firstname)
-        validateLastName(this.errors,this.user.lastname)
-        validateEmail(this.errors,this.user.email)
+        this.errors.push(...validateUsername(this.user.username))
+        this.errors.push(...validatePassword(this.user.password)) 
+        this.errors.push(...validateFirstName(this.user.firstname)) 
+        this.errors.push(...validateLastName(this.user.lastname)) 
+        this.errors.push(...validateEmail(this.user.email)) 
         if (this.errors.length > 0)
             throw new InputException(this.errors)
     }
@@ -49,16 +43,16 @@ export class RegisterValidator {
 
 }
 
-export class UpgradeProfileValidator {
-    readonly user:UpgradeProfileRequest
-    private  errors: FieldError[] = [] 
+export class UpgradeProfileValidator extends BaseValidator {
+    readonly user:UpgradeProfileDTO
 
-    constructor(user:UpgradeProfileRequest){
+    constructor(user:UpgradeProfileDTO){
+        super()
         this.user = user
     }
 
     validate(){
-        validateUsername(this.errors,this.user.username)
+        this.errors.push(...validateUsername(this.user.username))
         if (this.errors.length > 0)
             throw new InputException(this.errors)
     }
@@ -66,16 +60,16 @@ export class UpgradeProfileValidator {
 
 }
 
-export class UpdateTokenValidator {
-    readonly token:UpdateTokenRequest
-    private  errors: FieldError[] = [] 
+export class UpdateTokenValidator extends BaseValidator {
+    readonly token:UpdateTokenDTO
 
-    constructor(token:UpdateTokenRequest){
+    constructor(token:UpdateTokenDTO){
+        super()
         this.token = token
     }
 
     validate(){
-        validateRefreshToken(this.errors,this.token.refreshToken)
+        this.errors.push(...validateRequired("refreshToken",this.token))
         if (this.errors.length > 0)
             throw new InputException(this.errors)
     }
@@ -84,39 +78,46 @@ export class UpdateTokenValidator {
 }
 
 
-function validateRefreshToken(errors:FieldError[],refreshToken:string){
-    if (refreshToken === undefined )
-        errors.push({property:"refresh Token",error:"Refresh Token is required"})
-}
 
 
-function validateUsername(errors:FieldError[],username?:string){
-    if (username === undefined || username.length <= 0 ) 
-        errors.push({property:"username",error:"The username is required"})
-}
-
-function validateFirstName(errors:FieldError[],firstName?:string){
-    if (firstName === undefined || firstName.length <= 0 )
-        errors.push({property:"firstName",error:"The firstname is required"})
-}
-function validateLastName(errors:FieldError[],firstName?:string){
-    if (firstName === undefined || firstName.length <= 0 )
-        errors.push({property:"lastName",error:"The lastName is required"})
-}
-
-function validateEmail(errors:FieldError[],email?:string){
-    if (email === undefined || !validator.isEmail(email))
-        errors.push({property:"email",error:"Invalid Email"})
-}
-
-function validatePassword(errors:FieldError[],password?:string){
-    if (password === undefined){
-        errors.push({property:"password",error:"The password is required"})
-        
-    }else{
-        if (password.length <= MIN_PASSWORD_LENGTH)
-        errors.push({property:"password",error: `Passworn must contains ${MIN_PASSWORD_LENGTH} characters`})
-    }
-         
+export function validateUsername(username?:string){
+    const errors:FieldError[] = [] 
+    errors.push(...validateRequired("username",username))
+    if(errors.length === 0)
+        errors.push(...validateMinLength("username",username!,MIN_USER_LENGTH))
     
+    return errors 
 }
+
+function validateFirstName(firstName?:string){
+    const errors:FieldError[] = []
+    errors.push(...validateRequired("firstName",firstName))
+    if(errors.length === 0)
+        errors.push(...validateRangeLength("firstName",firstName!,MIN_USER_LENGTH,MAX_USER_LENGTH))
+    return errors 
+}
+function validateLastName(lastName?:string){
+    const errors:FieldError[] = []
+    errors.push(...validateRequired("lastName",lastName))
+    if(errors.length === 0)
+        errors.push(...validateRangeLength("lastName",lastName!,MIN_USER_LENGTH,MAX_USER_LENGTH))
+    return errors 
+}
+
+function validateEmail(email?:string){
+    const errors:FieldError[] = []
+    errors.push(...validateRequired("email",email))
+    if (errors.length === 0 && !validator.isEmail(email!))
+        errors.push({property:"email",error:"Invalid Email"})
+    return errors        
+}
+
+function validatePassword(password?:string){
+    const errors:FieldError[] = []
+    errors.push(...validateRequired("password",password))
+    if (errors.length === 0)
+        errors.push(...validateMinLength("password",password!,MIN_PASSWORD_LENGTH))     
+    return errors
+}
+
+

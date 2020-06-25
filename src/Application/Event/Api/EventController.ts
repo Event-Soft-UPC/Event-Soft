@@ -1,10 +1,9 @@
 import { eventRepository } from "../../../ioc/container"
 import { Router, Response, Request } from "express"
 import { EventService } from "../Services/EventService"
-import { upload } from "../../Middleware/photosManager"
-import { Auth } from "../../Security/AuthMiddleware"
-import { EventDTO, ZoneDTO } from "./HttpRequest"
-import { ImageException } from "../../Exception/InputException"
+import { upload, getMainPaths } from "../../Middleware/photosManager"
+import { Auth } from "../../Security/SecurityManager"
+import { EventDTO, ZoneDTO } from "./EventDTO"
 import { EventValidator } from "./EventValidator"
 import { CREATED, OK } from "http-status-codes"
 import { handlerExceptions } from "../../Handler/AuthHandler"
@@ -15,18 +14,15 @@ const eventService = new EventService(eventRepository)
 router.post("/",[upload,Auth("Publisher")],async (req: Request, res: Response)=>{
     try {
         const event = req.body as EventDTO
-        event.zones = req.body.zones.map((v:any) => JSON.parse(v) as ZoneDTO)    
-        if (req.files === undefined) throw new ImageException()        
-        const photo = req.files as {
+        event.zones = req.body.zones.map((v:any) => v as ZoneDTO)
+        event.image = getMainPaths(req.files as {
             [fieldname: string]: Express.Multer.File[]
-        }
-        event.image = photo.main[0].filename
+        } )[0]
         const result = new EventValidator(event)
         result.validate()
         const _event = await eventService.createEvent(event)
         res.status(CREATED).send(_event)
     } catch (error) {
-        console.log(error)
         const {status,body} = handlerExceptions(error)
         res.status(status).send(body)
     }
