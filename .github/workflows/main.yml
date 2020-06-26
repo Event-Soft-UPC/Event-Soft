@@ -33,7 +33,7 @@ jobs:
             password: ${{secrets.EMAIL_PASSWORD}}
             subject: Github Actions job result
             body: Build job of ${{github.repository}} completed successfully!
-            to: josemowa45321@gmail.com
+            to: josemowa45321@gmail.com,max.lara5599@gmail.com
             from: Event Soft CI
 
   
