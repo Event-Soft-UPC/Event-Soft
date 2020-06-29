@@ -1,6 +1,6 @@
 import { EventDTO, ZoneDTO } from "./EventDTO"
 import { InputException } from "../../Exception/InputException"
-import { BaseValidator, validateMainImages, validateRequired, validateCategoryName, validateArrayLength, validatePositiveNumber, validateMinLength, MIN_ZONE_LENGTH, validateDate, MIN_EVENT_LENGTH } from "../../Shared/BaseValidator"
+import { BaseValidator, validateMainImages, validateRequired,validateArrayLength, validatePositiveNumber, validateMinLength, MIN_ZONE_LENGTH, validateDate, MIN_EVENT_LENGTH } from "../../Shared/BaseValidator"
 import { validateUsername } from "../../Auth/Api/AuthValidator"
 
 export class EventValidator extends BaseValidator {
@@ -27,10 +27,10 @@ export class EventValidator extends BaseValidator {
 
 function validateCategories(categories?:string[]){
     const errors = validateRequired("categories",categories)
-    if (errors.length === 0 || categories!.some(v =>validateCategoryName(v).length > 0))
+   /*  if (errors.length === 0 || categories!.some(v =>validateCategoryName(v).length > 0))
     {
         errors.push({property:"categories",error:"Some category name is invalid"}) 
-    }
+    } */
     return errors  
 }
 

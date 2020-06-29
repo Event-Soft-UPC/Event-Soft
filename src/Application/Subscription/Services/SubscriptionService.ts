@@ -13,7 +13,6 @@ export class SubscriptionService {
     async createSubscriptions(category:string,username:string){
         const owner = await this.userRepository.findById(username)
         const _category = await this.categoryRepository.findByName(category)
-        console.log(owner)
         owner.addSubscription(_category.name)
         await this.userRepository.update(owner)
     }

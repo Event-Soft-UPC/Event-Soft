@@ -19,7 +19,7 @@ export class AuthUserService {
     async addPublisherProfile(username:string){
         const user = await this.authRepository.findById(username)
         user.addPublisherProfile()
-        await this.authRepository.save(user)
+        await this.authRepository.update(user)
     }
 
     async registerAsPublisher(email:string,password:string,username:string,name:string,lastname:string){

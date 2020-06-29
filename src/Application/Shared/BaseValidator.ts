@@ -1,4 +1,5 @@
-import { isValid } from "date-fns"
+import { parse } from "date-fns"
+import { DATE_FORMAT } from "../../Shared/Mapper/EventMapper"
 
 export const MAX_USER_LENGTH = 10
 export const MIN_PASSWORD_LENGTH = 6
@@ -80,9 +81,13 @@ export function validateMainImages(value?:string[]){
     
 }
 
+
+
 export function validateDate(field:string,value:string){
     const errors:FieldError[] = []
-    if (!isValid(value))
-        errors.push({property:field,error:`${field} must be date`})
+    const date =  parse(value,DATE_FORMAT,new Date())
+    if (isNaN(date.getTime()))
+         errors.push({property:field,error:`${field} must be date`})
     return errors
+    
 }

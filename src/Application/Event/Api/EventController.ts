@@ -3,7 +3,7 @@ import { Router, Response, Request } from "express"
 import { EventService } from "../Services/EventService"
 import { upload, getMainPaths } from "../../Middleware/photosManager"
 import { Auth } from "../../Security/SecurityManager"
-import { EventDTO, ZoneDTO } from "./EventDTO"
+import { EventDTO} from "./EventDTO"
 import { EventValidator } from "./EventValidator"
 import { CREATED, OK } from "http-status-codes"
 import { handlerExceptions } from "../../Handler/AuthHandler"
@@ -13,8 +13,10 @@ const eventService = new EventService(eventRepository)
 
 router.post("/",[upload,Auth("Publisher")],async (req: Request, res: Response)=>{
     try {
-        const event = req.body as EventDTO
-        event.zones = req.body.zones.map((v:any) => v as ZoneDTO)
+        const event =  req.body as EventDTO 
+        event.owner = req.body.username
+        event.zones = JSON.parse(req.body.zones)
+        event.categories = JSON.parse(req.body.categories)
         event.image = getMainPaths(req.files as {
             [fieldname: string]: Express.Multer.File[]
         } )[0]
@@ -23,7 +25,6 @@ router.post("/",[upload,Auth("Publisher")],async (req: Request, res: Response)=>
         const _event = await eventService.createEvent(event)
         res.status(CREATED).send(_event)
     } catch (error) {
-        console.log(error)
         const {status,body} = handlerExceptions(error)
         res.status(status).send(body)
     }
