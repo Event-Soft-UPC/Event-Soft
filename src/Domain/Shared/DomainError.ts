@@ -72,7 +72,7 @@ export class BuyTicketException extends DomainException {
 
 export class ZoneSoldOut extends DomainException {
     constructor() {
-        super("this zone is sold out")
+        super("this zone does not have enough tickets")
         Object.setPrototypeOf(this, new.target.prototype)
     }
 }

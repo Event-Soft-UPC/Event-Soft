@@ -264,6 +264,9 @@
                 "tags": [
                     "Auth"
                 ],
+                "security": [
+                    {"BearerAuth": []}
+                ],
                 "summary": "Upgrade to publisher profile",
                 "responses": {
                     "200": {
@@ -328,7 +331,19 @@
                     "content": {
                         "application/json":{
                             "schema":{
-                               "$ref":"#/components/schemas/PaymentDTO"
+                               "type": "object",
+                               "properties": {
+                                   "eventId":{
+                                       "type": "string"
+                                   },
+                                   "zone":{
+                                       "type": "string"
+                                   },
+                                   "quantity":{
+                                       "type": "number"
+                                   }
+
+                               }
                             }
                         }
                     }
@@ -376,7 +391,12 @@
                     "content": {
                         "application/json":{
                             "schema":{
-                               "$ref":"#/components/schemas/SubscriptionDTO"
+                               "type": "object",
+                               "properties": {
+                                   "category":{
+                                       "type": "string"
+                                   }
+                               }
                             }
                         }
                     }
@@ -750,9 +770,6 @@
             "EventRegisterDTO":{
                 "type": "object",
                 "properties": {
-                    "owner":{
-                        "type": "string"
-                    },
                     "name":{
                         "type": "string"
                     },
@@ -761,10 +778,7 @@
                         "format": "binary"
                     },
                     "categories":{
-                        "type": "array",
-                        "items":{
-                            "type": "string"
-                        }
+                        "type": "object"
                     },
                     "start":{
                         "type": "string",
@@ -781,10 +795,8 @@
                         "type": "string"
                     },
                     "zones":{
-                        "type": "array",
-                        "items":{
-                            "$ref":"#components/schemas/ZoneDTO"
-                        }
+                        "$ref":"#components/schemas/ZoneDTO"
+
                     }
                 }
             },
