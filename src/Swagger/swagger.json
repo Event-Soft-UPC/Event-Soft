@@ -462,6 +462,27 @@
                         }
                     }
                 }
+            },
+            "get":{
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Create a category",
+                "responses":{
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json":{
+                                "schema":{
+                                    "type": "array",
+                                    "items":{
+                                        "$ref":"#/components/schemas/CategoryDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/categories/{name}":{
