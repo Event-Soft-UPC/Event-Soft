@@ -467,7 +467,7 @@
                 "tags": [
                     "Category"
                 ],
-                "summary": "Create a category",
+                "summary": "Get all categories",
                 "responses":{
                     "200": {
                         "description": "OK",
