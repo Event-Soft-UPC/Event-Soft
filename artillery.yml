@@ -1,10 +1,14 @@
 config:
-  target: "https://kinesya.com"
+  target: "http://eventsoft.centralus.cloudapp.azure.com"
   phases:
-    - duration: 20
-      arrivalRate: 50
+    - duration: 10
+      arrivalRate: 5
+      rampTo: 50
+    - duration: 10
+      arrivalRate: 5
+      rampTo: 20
 scenarios:
   - name: "Get Events"
     flow:
       - get:
-          url: "/api/users"
+          url: "/api/v1/events"

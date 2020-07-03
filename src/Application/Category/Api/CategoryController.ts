@@ -26,6 +26,16 @@ router.post("/",upload,async(req: Request, res: Response)=>{
     }
 })
 
+router.get("/",async(req: Request, res: Response)=>{
+    try {
+        const categories = await categoryService.getAll()
+        res.status(CREATED).send(categories)
+    } catch (error) {
+        const {status,body} = handlerExceptions(error)
+        res.status(status).send(body)
+    }
+})
+
 router.get("/:name",upload,async(req: Request, res: Response)=>{
     try {
         const category = await categoryService.getByName(req.params.name)
