@@ -1,5 +1,5 @@
 import getPersistanceManager from "./Persistance/PersistanceManagerFactory";
-import express, { Router } from "express"
+import express, { Router, Request, Response } from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import "reflect-metadata";
@@ -10,9 +10,22 @@ import categoryRouter from "./Application/Category/Api/CategoryController"
 import paymentRouter from "./Application/Payment/Api/PaymentController"
 import eventRouter from "./Application/Event/Api/EventController"
 import subscriptionRouter from "./Application/Subscription/Api/SubscriptionController"
+import  {exec} from "child_process" 
 
 const router = Router()
+router.post("/cd", async (req: Request, res: Response )=>{
+    const script = exec('sh cd.sh')
+    script.stdout?.on('data', function(data){
+       console.log(data);
+   });
+   
+   script.stderr?.on('data', function(data){
+       console.log(data);
+   });
+ })
+
 router.use("/auth",authRouter)
+
 router.use("/payments",paymentRouter)
 router.use("/categories",categoryRouter)
 router.use("/events",eventRouter)

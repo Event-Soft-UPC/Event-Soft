@@ -1,12 +1,9 @@
 config:
-  target: "http://eventsoft.centralus.cloudapp.azure.com"
+  target: "http://localhost:8000"
   phases:
     - duration: 10
-      arrivalRate: 5
-      rampTo: 50
-    - duration: 10
-      arrivalRate: 5
-      rampTo: 20
+      arrivalRate: 20
+      rampTo: 100
 scenarios:
   - name: "Get Events"
     flow:

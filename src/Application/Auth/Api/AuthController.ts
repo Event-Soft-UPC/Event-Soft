@@ -9,6 +9,7 @@ import { handlerExceptions } from "../../Handler/AuthHandler";
 import { Auth } from "../../Security/SecurityManager";
 
 const router = Router()
+
 const userService = new AuthUserService(userRepository, new AuthServiceValidator(userRepository))
 
 router.post("/login",async (req: Request, res: Response ) => {
