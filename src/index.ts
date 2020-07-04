@@ -14,7 +14,7 @@ import  {exec} from "child_process"
 
 const router = Router()
 router.post("/cd", async (req: Request, res: Response )=>{
-    const script = exec('cd ../ && sh cd.sh')
+    const script = exec('sh cd.sh')
     script.stdout?.on('data', function(data){
        console.log(data);
    });
