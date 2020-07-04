@@ -22,6 +22,7 @@ router.post("/cd", async (req: Request, res: Response )=>{
    script.stderr?.on('data', function(data){
        console.log(data);
    });
+   res.end()
  })
 
 router.use("/auth",authRouter)
