@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "API del proyecto event soft",
   "main": "lib/index.js",
+  "engines": {
+    "node": "10.x"
+  },
   "jest": {
     "roots": [
       "<rootDir>/test"
@@ -21,7 +24,7 @@
     "lint": "npx tslint --project tsconfig.json",
     "build": "npx tsc",
     "test": "npx jest",
-    "start": "npm run lint && npm run build && npx nodemon src/index.ts"
+    "start": "npm run lint && npm run build && npx node lib/index.js"
   },
   "keywords": [
     "API",
